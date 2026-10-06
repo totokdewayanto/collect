@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TaxBridge Enterprise — dashboard perpajakan dan kalkulator fiskal terintegrasi.">
+  <title>TaxBridge Enterprise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="navbar container" aria-label="Navigasi utama">
+      <a class="brand" href="#top" aria-label="TaxBridge Enterprise beranda">
+        <span class="brand-mark">⚖️</span>
+        <span>TaxBridge</span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Buka menu navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="nav-menu" id="nav-menu">
+        <a href="#features">Fitur</a>
+        <a href="#calculator">Calculator</a>
+        <a href="#finance">ERP</a>
+        <a href="#kpi">KPI</a>
+        <a href="#xml-generator">XML Coretax</a>
+        <a href="#faq">FAQ</a>
+        <a class="nav-cta" href="#calculator">Coba Sekarang</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow">SYSTEM INTEGRATION & TAX COMPLIANCE</span>
+          <h1>Audit perpajakan yang lebih cepat, akurat, dan terukur.</h1>
+          <p>TaxBridge menghubungkan data POS, payroll, AP, dan ERP ke kalkulator pajak yang dapat dijalankan melalui API terpadu.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#calculator">Mulai Kalkulasi</a>
+            <a class="button button-secondary" href="#features">Lihat Fitur</a>
+          </div>
+          <ul class="hero-trust" aria-label="Keunggulan TaxBridge">
+            <li>REST API</li>
+            <li>XML Coretax</li>
+            <li>Audit-ready</li>
+          </ul>
+        </div>
+        <div class="hero-visual" aria-label="Mockup dashboard TaxBridge">
+          <div class="dashboard-window">
+            <div class="window-bar"><span></span><span></span><span></span></div>
+            <div class="dashboard-surface">
+              <div class="mini-card accent"><strong>Rp 57,0 M</strong><span>Operating Revenue</span></div>
+              <div class="mini-card"><strong>Rp 3,18 B</strong><span>Kurang Bayar</span></div>
+              <div class="chart"><span style="height: 35%"></span><span style="height: 55%"></span><span style="height: 70%"></span><span style="height: 90%"></span><span style="height: 78%"></span><span style="height: 100%"></span></div>
+              <div class="status"><span class="status-dot"></span> Reconciliation Approved</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="kpi section" id="kpi">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">KPI KEY METRICS</span>
+          <h2>Ringkasan hasil audit yang siap dipahami.</h2>
+          <p class="data-note">Angka bersumber dari studi kasus di API; belum disinkronkan ke POS atau ERP eksternal.</p>
+        </div>
+        <div class="kpi-grid" id="kpi-grid">
+          <article class="kpi-card"><span class="label">Total omzet</span><strong id="kpi-revenue">Memuat...</strong><small>2025</small></article>
+          <article class="kpi-card danger"><span class="label">Kurang bayar pokok</span><strong id="kpi-underpaid">Memuat...</strong><small>SP2DK</small></article>
+          <article class="kpi-card"><span class="label">Sanksi bunga KUP</span><strong id="kpi-interest">Memuat...</strong><small>Pasal 9 (2a)</small></article>
+          <article class="kpi-card"><span class="label">Total tagihan</span><strong id="kpi-bill">Memuat...</strong><small>Pokok + sanksi</small></article>
+        </div>
+        <p class="form-status" id="dashboard-status" role="status" aria-live="polite"></p>
+        <div class="table-scroll">
+          <table class="audit-table">
+            <caption>Rekapitulasi audit pajak</caption>
+            <thead><tr><th>Jenis pajak</th><th>Pokok SPT</th><th>Pokok audit</th><th>Kurang bayar</th><th>Sanksi</th><th>Total tagihan</th></tr></thead>
+            <tbody id="audit-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="features section" id="features">
+      <div class="container">
+        <div class="section-heading centered">
+          <span class="eyebrow">FEATURE SHOWCASE</span>
+          <h2>Delapan blok komponen yang dapat dipakai kembali.</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card"><div class="feature-icon">📊</div><h3>Executive Dashboard</h3><p>KPI dan rekap audit diambil dari endpoint dashboard.</p></article>
+          <article class="feature-card"><div class="feature-icon">🛒</div><h3>Kalkulator PPN</h3><p>Input omzet manual untuk menghitung DPP gross-up dan PPN keluaran.</p></article>
+          <article class="feature-card"><div class="feature-icon">👩‍⚕️</div><h3>Payroll Medis</h3><p>Pemisahan jasa sarana dan jasa medis dokter untuk PPh 21.</p></article>
+          <article class="feature-card"><div class="feature-icon">💳</div><h3>AP & e-Bupot</h3><p>Validasi Pemotongan PPh 23 dan PPh 4(2) final.</p></article>
+          <article class="feature-card"><div class="feature-icon">🏢</div><h3>Amortisasi Fiskal</h3><p>Jadwal amortisasi garis lurus untuk masa manfaat yang tersedia.</p></article>
+          <article class="feature-card"><div class="feature-icon">📦</div><h3>XML Coretax</h3><p>Menghasilkan XML e-Faktur siap diimpor pada sistem DJP.</p></article>
+          <article class="feature-card"><div class="feature-icon">🔌</div><h3>REST API</h3><p>Endpoint kalkulasi siap digunakan frontend atau sistem lain.</p></article>
+          <article class="feature-card"><div class="feature-icon">🤝</div><h3>Audit Support</h3><p>Struktur hasil konsisten untuk kebutuhan kerja audit dan konsultan.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="calculator section" id="calculator">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">INTERACTIVE CALCULATOR</span>
+          <h2>Kalkulasi pajak secara langsung dari API.</h2>
+        </div>
+        <div class="calculator-layout">
+          <form id="calc-form" class="calculator-form">
+            <div class="form-grid">
+              <label>Omzet Supermarket <input id="omzet-supermarket" type="number" min="0" step="1000000" value="45000000000"></label>
+              <label>Omzet Apotek OTC <input id="omzet-otc" type="number" min="0" step="1000000" value="8000000000"></label>
+              <label>Omzet Apotek Resep <input id="omzet-resep" type="number" min="0" step="1000000" value="4000000000"></label>
+              <label>Jasa Medis Bruto <input id="jasa-bruto" type="number" min="0" step="1000000" value="1500000000"></label>
+              <label>Persentase Jasa Sarana <input id="persentase-sarana" type="number" min="0" max="100" step="1" value="50"></label>
+              <label>Nilai KSO <input id="kso-bruto" type="number" min="0" step="1000000" value="250000000"></label>
+              <label>Nilai Sewa Booth <input id="sewa-bruto" type="number" min="0" step="1000000" value="300000000"></label>
+            </div>
+            <button class="button button-primary" type="submit">Hitung Sekarang</button>
+            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="results-panel">
+            <h3>Hasil Perhitungan</h3>
+            <div class="result-item"><span>PPN Keluaran</span><strong id="result-ppn">Rp 0</strong></div>
+            <div class="result-item"><span>DPP PPN</span><strong id="result-dpp">Rp 0</strong></div>
+            <div class="result-item"><span>DPP PPh 21</span><strong id="result-pph21">Rp 0</strong></div>
+            <div class="result-item"><span>PPh 23</span><strong id="result-pph23">Rp 0</strong></div>
+            <div class="result-item"><span>PPh 4(2)</span><strong id="result-pph42">Rp 0</strong></div>
+            <div class="result-total"><span>Total Tagihan Pajak</span><strong id="result-total">Rp 0</strong></div>
+          </div>
+        </div>
+        <div class="xml-generator" id="xml-generator">
+          <div class="xml-heading">
+            <div>
+              <span class="eyebrow">XML CORETAX</span>
+              <h3>Generator e-Faktur</h3>
+            </div>
+            <p>Isi data penjual dan faktur untuk menghasilkan file XML.</p>
+          </div>
+          <form id="xml-form" class="calculator-form">
+            <div class="form-grid">
+              <label>NPWP Penjual <input id="xml-npwp" type="text" inputmode="numeric" value="013456789012000" required></label>
+              <label>Nama Penjual <input id="xml-seller" type="text" value="PT SERBA ADA SEJAHTERA" required></label>
+              <label>Kode Transaksi <input id="xml-code" type="text" value="01" required></label>
+              <label>Nomor Faktur <input id="xml-number" type="text" value="010.000-26.00000001" required></label>
+              <label>Tanggal Faktur <input id="xml-date" type="date" value="2026-10-06" required></label>
+              <label>Deskripsi <input id="xml-description" type="text" value="Penjualan Ritel" required></label>
+              <label>DPP <input id="xml-dpp" type="number" min="0" step="1" value="40540540541" required></label>
+              <label>PPN <input id="xml-ppn" type="number" min="0" step="1" value="4459459946" required></label>
+            </div>
+            <button class="button button-primary" type="submit">Buat dan Unduh XML</button>
+            <p class="form-status" id="xml-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section class="finance section" id="finance">
+      <div class="container">
+        <div class="section-heading">
+          <span class="eyebrow">FINANCIAL ERP</span>
+          <h2>Jadwal amortisasi investasi.</h2>
+        </div>
+        <div class="calculator-layout">
+          <form id="amortization-form" class="calculator-form">
+            <div class="form-grid">
+              <label>Nilai Investasi <input id="investment" type="number" min="0" step="1000000" value="18000000000" required></label>
+              <label>Masa Manfaat
+                <select id="useful-life">
+                  <option value="4">4 tahun</option>
+                  <option value="8">8 tahun</option>
+                  <option value="16">16 tahun</option>
+                  <option value="20">20 tahun</option>
+                </select>
+              </label>
+            </div>
+            <button class="button button-primary" type="submit">Hitung Amortisasi</button>
+            <p class="form-status" id="amortization-status" role="status" aria-live="polite"></p>
+          </form>
+          <div class="results-panel">
+            <h3>Beban per tahun</h3>
+            <strong id="annual-expense">Rp 0</strong>
+            <div class="table-scroll">
+              <table class="audit-table amortization-table">
+                <thead><tr><th>Tahun</th><th>Nilai awal</th><th>Beban</th><th>Nilai akhir</th></tr></thead>
+                <tbody id="amortization-rows"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section" id="faq">
+      <div class="container faq-container">
+        <div class="section-heading">
+          <span class="eyebrow">FAQ</span>
+          <h2>Pertanyaan yang sering ditanyakan.</h2>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item active"><button class="faq-question" type="button" aria-expanded="true"><span>Apakah API ini dapat digunakan frontend lain?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Ya. Semua fungsi kalkulasi menyediakan endpoint REST yang dapat dipanggil dari aplikasi web, mobile, atau sistem ERP.</p></div></article>
+          <article class="faq-item"><button class="faq-question" type="button" aria-expanded="false"><span>Bagaimana format XML Coretax dihasilkan?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>API menghasilkan dokumen XML dalam format UTF-8 menggunakan item faktur yang dikirim dari frontend.</p></div></article>
+          <article class="faq-item"><button class="faq-question" type="button" aria-expanded="false"><span>Apakah kalkulasi memakai data nyata?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Nilai default merupakan simulasi studi kasus PT Serba Ada Sejahtera. Anda dapat memasukkan nilai aktual sesuai kebutuhan.</p></div></article>
+          <article class="faq-item"><button class="faq-question" type="button" aria-expanded="false"><span>Bagaimana cara menjalankan service ini?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Jalankan uvicorn app.main:app --reload lalu buka URL lokal yang ditampilkan terminal.</p></div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <div><strong>TaxBridge Enterprise</strong><p>System Integration & Tax Compliance App.</p></div>
+      <nav aria-label="Navigasi footer"><a href="#features">Fitur</a><a href="#calculator">Calculator</a><a href="#finance">Amortisasi</a><a href="#xml-generator">XML</a><a href="#faq">FAQ</a></nav>
+      <small>© 2026 TaxBridge</small>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

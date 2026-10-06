@@ -1,0 +1,66 @@
+================================================================================
+RINGKASAN SOAL KASUS & PETUNJUK PRAKTIK KONSULTAN PAJAK
+Adaptasi Kasus #6 (Oliver Wyman - Ann Arbor Supermarket Pharmacy Addition)
+Sesuai Pola & Skema SKILL-Konsultan-Pajak-Rumah-Sakit.txt
+================================================================================
+
+1. INFORMASI UMUM & IDENTITAS KLIEN
+--------------------------------------------------------------------------------
+Nama Entitas        : PT Serba Ada Sejahtera (Ann Arbor Supermarket & Apotek)
+NPWP                : 01.345.678.9-012.000
+KLU / Industri      : 47111 (Perdagangan Eceran Supermarket) & 47721 (Apotek)
+Masa / Tahun Pajak  : Januari - Desember 2025
+Nomor SP2DK DJP     : S-892/WPJ.07/KP.04/2026 (KPP Madya Jakarta)
+Status Kasus        : Audit Ekualisasi Fiskal & Tanggapan SP2DK
+
+2. RINGKASAN PARADIGMA BISNIS & SKENARIO KASUS
+--------------------------------------------------------------------------------
+PT Serba Ada Sejahtera mengoperasikan supermarket ritel dengan basis 10.000 
+pelanggan unik bulanan. Berdasarkan analisis studi kelayakan bisnis (Kasus #6), 
+perusahaan melakukan ekspansi unit bisnis baru: Penambahan Apotek (Pharmacy Addition) 
+dengan investasi awal Rp 18.000.000.000 ($1.200.000 USD @ Rp 15.000).
+
+Realisasi Angka Keuangan Tahun 2025:
+- Penjualan Supermarket (Ritel BKP)            : Rp 45.000.000.000
+- Penjualan Apotek - OTC (Obat Bebas BKP)      : Rp  8.000.000.000
+- Penjualan Apotek - Resep Dokter Mitra        : Rp  4.000.000.000
+- Beban Investasi Awal Apotek                  : Rp 18.000.000.000 (Di-OpEx-kan)
+- Honor Dokter & Apoteker                      : Rp  1.500.000.000
+- Bagi Hasil KSO Alat Tes Darah                : Rp    250.000.000
+- Pendapatan Sewa Space Booth & Kantin         : Rp    450.000.000
+
+3. TEMUAN AUDIT & ANOMALI PERPAJAKAN (DESAIN SP2DK)
+--------------------------------------------------------------------------------
+1. PPN Penyerahan Apotek OTC & Resep Dokter:
+   - Klien tidak melakukan Gross-up DPP PPN (100/111) x Omzet Apotek OTC.
+   - Klien salah memperlakukan Penjualan Obat Resep Dokter sebagai Bebas PPN (Non-BKP).
+   - Koreksi Audit: PPN Keluaran Terutang Pokok = Rp 396.396.396 + Sanksi KUP Bunga.
+
+2. PPh Pasal 21 Dokter & Apoteker:
+   - Klien memotong PPh 21 Dokter Konsultasi Booth Apotek tanpa memisahkan Jasa Sarana 
+     Supermarket vs Jasa Medis Murni Hak Dokter (PER-16/PJ/2016).
+   - Koreksi Audit: Kurang potong PPh 21 Pokok = Rp 55.500.000 + Sanksi KUP Bunga.
+
+3. PPh Pasal 23 KSO & PPh 4(2) Sewa Booth:
+   - Bagi Hasil KSO Alat Medis Rp 250 Juta belum dipotong PPh 23 2% (Rp 5.000.000).
+   - Sewa Space Booth Apotek Rp 300 Juta belum dipotong PPh 4(2) Final 10% (Rp 30.000.000).
+
+4. PPh Badan & Amortisasi Harta Tak Berwujud:
+   - Beban investasi awal Rp 18M tidak boleh langsung di-OpEx-kan penuh pada Tahun 1.
+   - Koreksi Fiskal Negatif Rp 18M, dikapitalisasi sebagai Harta Tak Berwujud, 
+     dan diamortisasi 4 Tahun (Rp 4.500.000.000/tahun).
+   - Koreksi Audit: Kurang bayar PPh Badan Pokok = Rp 2.695.000.000 + Sanksi KUP.
+
+4. PARAMETER KUNCI JAWABAN & TOTAL REKONSILIASI PAJAK
+--------------------------------------------------------------------------------
+- Total Pokok Kurang Bayar Pajak               : Rp 3.181.896.396
+- Total Sanksi KUP Bunga (~1% - 2%/bln)        : Rp   122.065.495
+- TOTAL TAGIHAN PAJAK HASIL AUDIT              : Rp 3.303.961.891
+
+5. DAFTAR ARTEFAK DOKUMEN YANG DIHASILKAN
+--------------------------------------------------------------------------------
+1. Laporan-Keuangan-dan-Kertas-Kerja-Audit.xlsx  (Spreadsheet Google Sheets/Excel)
+2. Soal-Kasus-Audit-Pajak-Supermarket-Apotek.pdf (Dokumen Lembar Soal & SP2DK DJP)
+3. Surat-Tanggapan-SP2DK-dan-Laporan-Audit.docx (Dokumen Word Surat Resmi & COSO IT)
+4. Ringkasan-Kasus-dan-Petunjuk-Praktik.txt     (Text File Parameter Soal & Rubrik)
+================================================================================
