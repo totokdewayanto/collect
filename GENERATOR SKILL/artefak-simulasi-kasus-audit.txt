@@ -1,0 +1,195 @@
+# PAKET ARTEFAK DOKUMEN & SIMULASI AUDIT INTEGRATED (CHIPS-v2 ENGINE)
+
+> **Kode Dokumen**: `ART-SIM-2026-NTP-001`  
+> **Generator Standard**: Universal Multi-Industry Artifact, System & Audit Simulation Generator (`Generator-ARTEFAK-Dokumen.md`)  
+> **Rezim Standar**: PSAK / IFRS, SPAP / ISA & UU HPP / Coretax DJP Indonesia  
+
+---
+
+## 1. %SYM 🏛️ PROFIL ENTITAS & SKENARIO KASUS ($ENTITY_CONTEXT_FABRIC)
+
+* **Nama Perusahaan**: PT Nusantara Tekstil Pratama Tbk
+* **Jenis Industri**: Manufaktur Tekstil & Produk Garment Ekspor
+* **Rezim Pajak & Standar**: PSAK / IFRS & UU HPP / DJP Indonesia
+* **Skenario Kasus**: Audit Umum & Investigasi atas Pengakuan Pendapatan (*Revenue Recognition*), *Cut-off* Penjualan Ekspor Akhir Tahun, dan Potensi Kebocoran Sistem ERP vs Faktur Pajak Elektronik (*Coretax Mismatch*).
+* **Tingkat Anomali**: `%ANOMALY_LEVELS` (L2_SYSTEM_INTEGRATION_GAP & L3_FORENSIC_FRAUD)
+* **Bagan Akun Utama (Chart of Accounts - Selected)**:
+  * `10100` - Kas & Setara Kas
+  * `10200` - Piutang Usaha (Lokal & Ekspor)
+  * `10201` - Penyisihan Kerugian Penurunan Nilai Piutang
+  * `10300` - Persediaan Barang Jadi
+  * `20100` - Utang Usaha
+  * `20300` - Utang Pajak (PPN & PPh)
+  * `40100` - Penjualan Lokal
+  * `40200` - Penjualan Ekspor
+  * `50100` - Beban Pokok Penjualan (HPP)
+
+---
+
+## 2. %SYM 📊 LAPORAN KEUANGAN SIMULASI ($FIN_STATEMENT_ENGINE)
+
+### PT Nusantara Tekstil Pratama Tbk
+#### Laporan Laba Rugi dan Penghasilan Komprehensif Lain
+*Untuk Periode yang Berakhir 31 Desember 2025 (Dalam Rupiah)*
+
+| Akun / Keterangan | 2025 (Unadjusted / Draft) | 2024 (Audited PY) | Kenaikan / (Penurunan) |
+| :--- | :--- | :--- | :--- |
+| **Penjualan Bersih** | Rp 450.000.000.000 | Rp 380.000.000.000 | +18.42% |
+| **Beban Pokok Penjualan** | (Rp 315.000.000.000) | (Rp 266.000.000.000) | +18.42% |
+| **Laba Kotor** | **Rp 135.000.000.000** | **Rp 114.000.000.000** | **+18.42%** |
+| Beban Penjualan & Pemasaran | (Rp 28.500.000.000) | (Rp 24.000.000.000) | +18.75% |
+| Beban Umum & Administrasi | (Rp 42.000.000.000) | (Rp 38.000.000.000) | +10.53% |
+| **Laba Usaha (EBIT)** | **Rp 64.500.000.000** | **Rp 52.000.000.000** | **+24.04%** |
+| Beban Keuangan / Bunga | (Rp 8.500.000.000) | (Rp 9.200.000.000) | -7.61% |
+| **Laba Sebelum Pajak (EBT)** | **Rp 56.000.000.000** | **Rp 42.800.000.000** | **+30.84%** |
+| Beban Pajak Penghasilan (22%) | (Rp 12.320.000.000) | (Rp 9.416.000.000) | +30.84% |
+| **Laba Bersih Tahun Berjalan** | **Rp 43.680.000.000** | **Rp 33.384.000.000** | **+30.84%** |
+
+---
+
+## 3. %SYM 🧾 DOKUMEN KOMERSIAL / INVOICE ($INVOICE_BILLING_FORGE)
+
+```
+================================================================================
+                     FAKTUR KOMERSIAL / COMMERCIAL INVOICE
+================================================================================
+Nomor Invoice  : INV/NTP/2025/12-089
+Tanggal        : 28 Desember 2025
+Nomor PO Klien : PO-GLOBAL-88491
+Syarat Bayar   : Net 30 Days (FOB Shipping Point)
+Nama Pelanggan : Global Fashion Corp, Ltd. (Singapore Branch)
+Alamat         : 12 Marina Boulevard, #18-01, Marina Bay Financial Centre, SG
+
+--------------------------------------------------------------------------------
+No | Rincian Produk / Deskripsi           | Qty (Roll) | Harga Unit (Rp) | Total Harga (Rp)
+---|--------------------------------------|------------|-----------------|-----------------
+1  | Kain Katun Combed 30s Grade A        | 1.500      | Rp 1.200.000     | Rp 1.800.000.000
+2  | Kain Polyester Filament Premium     | 1.000      | Rp    950.000   | Rp   950.000.000
+--------------------------------------------------------------------------------
+SUBTOTAL                                 : Rp 2.750.000.000
+Diskon Komersial (Vol. Discount 5%)      : (Rp  137.500.000)
+DASAR PENGENAAN PAJAK (DPP)              : Rp 2.612.500.000
+PPN (0% - Fasilitas Ekspor KITE)        : Rp             0
+--------------------------------------------------------------------------------
+TOTAL TAGIHAN (NET AMOUNT DUE)           : Rp 2.612.500.000
+================================================================================
+Catatan Logistik & Anomali Cut-off (%ANOMALY_LEVELS - L2):
+- Bill of Lading (B/L) No: BL-KM-2026/01-004 tertanggal 03 JANUARI 2026.
+- Barang fisik baru keluar dari gudang pada tanggal 02 JANUARI 2026.
+- Pengakuan penjualan telah dibukukan penuh pada 28 Desember 2025 (Premature Sales Recognition).
+================================================================================
+```
+
+---
+
+## 4. %SYM 📑 SURAT RESMI KEDINASAN / TAX AUDIT NOTICE ($REGULATORY_LETTER_BUILDER)
+
+```
+================================================================================
+            KEMENTERIAN KEUANGAN REPUBLIK INDONESIA
+             DIREKTORAT JENDERAL PAJAK (DJP)
+        KANTOR PELAYANAN PAJAK (KPP) MADYA SEMARANG
+================================================================================
+Nomor   : S-1422/WPJ.10/KP.04/2026                      04 Februari 2026
+Sifat   : Sangat Rahasia / Permintaan Penjelasan
+Hal     : Permintaan Penjelasan atas Data dan/atau Keterangan (SP2DK)
+
+Kepada Yth.
+Direksi PT Nusantara Tekstil Pratama Tbk
+Kawasan Industri Terboyo Blok M-12, Semarang
+
+Sehubungan dengan analisis data perpajakan melalui Sistem Inti Administrasi Perpajakan (Coretax) tahun pajak 2025, dengan ini disampaikan temuan selisih (omset mismatch):
+
+1. Penjualan Menurut SPT Masa PPN (Januari - Desember 2025) : Rp 442.387.500.000
+2. Penjualan Menurut SPM PPh Badan / Laporan Keuangan     : Rp 450.000.000.000
+3. Selisih Omzet Belum Dilaporkan PPN/Dikonfirmasi        : Rp   7.612.500.000
+
+Dimohon Saudara memberikan klarifikasi tertulis beserta dokumen pendukung (Faktur Pajak, PEB, B/L, dan Rekonsiliasi Omzet) dalam jangka waktu 14 (empat belas) hari kerja sejak tanggal surat ini.
+
+Kepala Kantor Pelayanan Pajak Madya Semarang,
+
+( TTD & CAP RESMI )
+Dr. Hendra Wijaya, M.Si.
+NIP 19780512 200112 1 002
+================================================================================
+```
+
+---
+
+## 5. %SYM 📐 DIAGRAM ALIR PROSES BUSA / SWIMLANE ($FLOWCHART_SWIMLANE_SYNTAX)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Sales as Departemen Pemasaran
+    actor Whse as Gudang & Logistik
+    actor Acc as Akuntansi (ERP System)
+    actor Fin as Keuangan & Kasir
+    actor Ext as External Auditor / DJP
+
+    Sales->>Whse: 1. Terbitkan Sales Order (SO) & Instruction
+    Sales->>Acc: 2. Input Sales Invoice (INV/NTP/2025/12-089)
+    Note over Acc: ANOMALY L2: Invoice di-posting tanpa verifikasi B/L & DO
+    Whse--xWhse: 3. Pengeluaran Fisik Barang Tertunda (Januari 2026)
+    Acc->>Fin: 4. Merekam Piutang Usaha (Rp 2.612.500.000)
+    Whse->>Sales: 5. Terbitkan Bill of Lading (B/L Tanggal 03 Jan 2026)
+    Ext->>Acc: 6. Pengujian Cut-off Penjualan Akhir Tahun
+    Ext->>Ext: 7. Temuan Premature Revenue Recognition & SP2DK Mismatch
+```
+
+---
+
+## 6. %SYM 📈 REKAPITULASI TABULAR / SPREADSHEET MATRIX ($SPREADSHEET_CSV_MATRIX)
+
+### Sample Dataset Transaction Reconciliation Matrix (CSV Ready)
+
+```csv
+No_Ref,Tanggal_Buku,Nomor_Invoice,Nomor_BL_DO,Nilai_Buku_Rp,Tanggal_Fisik_BL,Status_Cutoff,Anomali_Flag
+TRX-001,2025-12-15,INV/12-010,DO-8812,1500000000,2025-12-15,Valid,NONE
+TRX-002,2025-12-20,INV/12-045,DO-8840,3200000000,2025-12-21,Valid,NONE
+TRX-003,2025-12-28,INV/12-089,BL-KM-2026/01,2612500000,2026-01-03,Cut-off Error,L2_PREMATURE_REVENUE
+TRX-004,2025-12-30,INV/12-095,DO-8899,5000000000,2026-01-05,Cut-off Error,L2_PREMATURE_REVENUE
+TRX-005,2025-12-31,INV/12-100,BL-KM-2026/02,3000000000,2026-01-04,Unrecorded Unearned,L3_FICTITIOUS_SALES_RISK
+```
+
+---
+
+## 7. %SYM 🎯 KERTAS KERJA PEMERIKSAAN (KKP) & RUBRIK AUDIT ($AUDIT_EVAL_BENCHMARK)
+
+### KERTAS KERJA PEMERIKSAAN (KKP) KONTROL PENJUALAN
+* **Index KKP**: `B.210` (Pengujian Substantif Cut-off Penjualan & Piutang)
+* **Nama Klien**: PT Nusantara Tekstil Pratama Tbk
+* **Periode Audit**: 31 Desember 2025
+* **Prepared By / Date**: Senior External Auditor / 15 Januari 2026
+* **Reviewed By / Date**: Audit Engagement Lead / 20 Januari 2026
+
+#### 1. Materiality & Sampling Benchmark
+* **Planning Materiality (PM)**: $5\%$ x EBT (Rp 56.000.000.000) = **Rp 2.800.000.000**
+* **Performance Materiality / Tolerable Error (TE)**: $75\%$ x PM = **Rp 2.100.000.000**
+* **Trivial Threshold (SUM)**: $5\%$ x TE = **Rp 105.000.000**
+
+#### 2. Schedule Proposed Audit Adjustments (AJE)
+
+| No | Akun / Deskripsi Jurnal Penyesuaian | Debet (Rp) | Kredit (Rp) | Dasar Acuan (PSAK/SAK) | Ref KKP |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | **Penjualan Ekspor** (`40200`) | 2.612.500.000 | - | PSAK 72 (Pengakuan Pendapatan) | B.210 |
+| | **Piutang Usaha** (`10200`) | - | 2.612.500.000 | Penyerahan barang belum terjadi di 2025 | B.210 |
+| 2 | **Persediaan Barang Jadi** (`10300`) | 1.828.750.000 | - | PSAK 14 (Persediaan) | C.100 |
+| | **Beban Pokok Penjualan** (`50100`) | - | 1.828.750.000 | Reklasifikasi fisik barang gudang (HPP 70%) | C.100 |
+
+#### 3. Memorandum Temuan Audit (Audit Finding Memo)
+* **Kondisi (Condition)**: Ditemukan pengakuan pendapatan penjualan ekspor sebesar Rp 2.612.500.000 pada tanggal 28 Desember 2025 atas Invoice INV/12-089. Namun, *Bill of Lading* (B/L) dan pengeluaran fisik gudang baru terjadi pada 03 Januari 2026.
+* **Kriteria (Criteria)**: PSAK 72 paragraf 31 mensyaratkan pendapatan diakui ketika entitas mengalihkan pengendalian atas barang/jasa kepada pelanggan (FOB *Shipping point* ditandai tanggal pengapalan/BL).
+* **Akibat (Effect)**: Pendapatan dan Piutang Usaha tahun 2025 *overstated* sebesar Rp 2.612.500.000, serta HPP *overstated* dan Persediaan *understated* sebesar Rp 1.828.750.000. Selain itu memicu SP2DK dari DJP akibat selisih waktu pengakuan omset PPN vs PPh.
+* **Rekomendasi (Recommendation)**: 
+  1. Membukukan *Proposed AJE* No. 1 & 2 di atas.
+  2. Memperbaiki *system constraint* pada ERP agar pengakuan piutang/faktur mewajibkan nomor dan tanggal validasi B/L atau DO.
+
+#### 4. Rubrik Evaluasi Kompetensi Peserta Simulasi Audit
+
+| Elemen Kompetensi | Bobot (%) | Kriteria Penilaian Sangat Baik (Skor 85-100) |
+| :--- | :--- | :--- |
+| **Identifikasi Anomali Cut-off** | 30% | Berhasil menemukan *mismatch* antara *Invoice Date* dan *B/L Date* serta menghitung dampaknya. |
+| **Penyusunan Jurnal Koreksi AJE** | 35% | Mengajukan AJE berpasangan (Penjualan vs Piutang & Persediaan vs HPP) sesuai PSAK 72 & 14. |
+| **Analisis Risiko Pajak SP2DK** | 20% | Mampu merekonsiliasi selisih omset PPN vs PPh Badan dan menyusun jawaban tanggapan SP2DK. |
+| **Rekomendasi Pengendalian COSO** | 15% | Memberikan solusi *hard-control* pada ERP (pencocokan 3 arah: PO, DO/BL, Invoice). |

@@ -1,0 +1,225 @@
+{
+  "name": "Audit_Automation_NTP_CutOff_Validation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "erp-sales-invoice-check",
+        "options": {}
+      },
+      "name": "Webhook ERP Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "erp-sales-invoice-webhook"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.ERP_API_BASE_URL }}/shipping/bill-of-lading",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "so_number",
+              "value": "={{ $json.body.sales_order_ref }}"
+            }
+          ]
+        },
+        "authentication": "genericCredentialType",
+        "genericCredentialType": "httpHeaderAuth"
+      },
+      "name": "Fetch B/L Shipping API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [460, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ERP_API_CREDENTIALS",
+          "name": "ERP Production API Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Logic Engine: Cut-off Validation & Materiality Assessment (SA 320 / PSAK 72)\nconst invoice = $(\"Webhook ERP Trigger\").first().json.body;\nconst shipping = $input.first().json;\n\nconst TE_THRESHOLD = 2100000000; // Performance Materiality PT NTP (Rp 2.1 Miliar)\nconst invoiceDate = new Date(invoice.invoice_date);\nconst blDate = shipping.bl_date ? new Date(shipping.bl_date) : null;\n\nlet isCutoffError = false;\nlet riskLevel = 'NONE';\nlet requiresAJE = false;\n\n// Validation Rule: FOB Shipping Point Control Transfer\nif (!blDate || blDate > invoiceDate) {\n  isCutoffError = true;\n  if (invoice.net_amount >= TE_THRESHOLD) {\n    riskLevel = 'MATERIAL_TE_EXCEEDED';\n    requiresAJE = true;\n  } else {\n    riskLevel = 'IMMATERIAL_DEVIATION';\n  }\n}\n\nreturn [{\n  json: {\n    invoice_id: invoice.invoice_id,\n    customer_name: invoice.customer_name,\n    net_amount: invoice.net_amount,\n    invoice_date: invoice.invoice_date,\n    bl_number: shipping.bl_number || 'MISSING',\n    bl_date: shipping.bl_date || null,\n    cutoff_error: isCutoffError,\n    risk_level: riskLevel,\n    requires_proposed_aje: requiresAJE,\n    anomali_flag: isCutoffError ? 'L2_PREMATURE_REVENUE' : 'NONE'\n  }\n}];"
+      },
+      "name": "3-Way Matching Code Node",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.cutoff_error }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Switch: Anomali Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $env.ERP_API_BASE_URL }}/sales/invoice/hard-lock",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"invoice_id\": \"{{ $json.invoice_id }}\",\n  \"status\": \"BLOCKED_POSTING\",\n  \"reason\": \"Cut-off Error: Revenue Recognition premature prior to B/L Date (PSAK 72)\",\n  \"flag\": \"{{ $json.anomali_flag }}\"\n}",
+        "authentication": "genericCredentialType",
+        "genericCredentialType": "httpHeaderAuth"
+      },
+      "name": "ERP Hard-Lock API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1120, 300],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "ERP_API_CREDENTIALS",
+          "name": "ERP Production API Header"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO audit_finding_logs (finding_ref, entity_name, invoice_id, net_amount, bl_date, anomaly_flag, risk_level, requires_aje, created_at)\nVALUES ('B.210', 'PT Nusantara Tekstil Pratama Tbk', $1, $2, $3, $4, $5, $6, NOW());",
+        "queryParams": "={{ [$json.invoice_id, $json.net_amount, $json.bl_date, $json.anomali_flag, $json.risk_level, $json.requires_proposed_aje] }}"
+      },
+      "name": "Log Audit Trail Postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2,
+      "position": [1340, 300],
+      "credentials": {
+        "postgres": {
+          "id": "AUDIT_DB_CREDENTIALS",
+          "name": "Audit Trail Database"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "channel": "#audit-alerts-internal",
+        "text": "=🚨 *AUDIT ANOMALY ALERT - PT NTP (KKP B.210)* 🚨\n• *Invoice ID*: {{ $json.invoice_id }}\n• *Pelanggan*: {{ $json.customer_name }}\n• *Nilai Tagihan*: Rp {{ $json.net_amount.toLocaleString('id-ID') }}\n• *Status Cut-off*: PREMATURE REVENUE (B/L Date: {{ $json.bl_date || 'N/A' }})\n• *Risk Level*: {{ $json.risk_level }}\n• *Tindakan Automatis*: ERP Hard-Lock Applied & Proposed AJE Draft Created."
+      },
+      "name": "Slack Audit Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [1560, 300],
+      "credentials": {
+        "slackApi": {
+          "id": "SLACK_AUDIT_BOT",
+          "name": "Audit Alert Slack Bot"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "name": "Error Trigger Handler",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [240, 520]
+    },
+    {
+      "parameters": {
+        "channel": "#devops-workflow-errors",
+        "text": "=⚠️ *n8n Workflow Execution Failure*\n• *Workflow*: Audit_Automation_NTP_CutOff_Validation\n• *Execution ID*: {{ $execution.id }}\n• *Error Node*: {{ $json.execution.error.node.name }}\n• *Message*: {{ $json.execution.error.message }}"
+      },
+      "name": "Slack DevOps Error Alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [460, 520],
+      "credentials": {
+        "slackApi": {
+          "id": "SLACK_AUDIT_BOT",
+          "name": "Audit Alert Slack Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook ERP Trigger": {
+      "main": [
+        [
+          {
+            "node": "Fetch B/L Shipping API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch B/L Shipping API": {
+      "main": [
+        [
+          {
+            "node": "3-Way Matching Code Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3-Way Matching Code Node": {
+      "main": [
+        [
+          {
+            "node": "Switch: Anomali Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch: Anomali Detected?": {
+      "main": [
+        [
+          {
+            "node": "ERP Hard-Lock API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ERP Hard-Lock API": {
+      "main": [
+        [
+          {
+            "node": "Log Audit Trail Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Audit Trail Postgres": {
+      "main": [
+        [
+          {
+            "node": "Slack Audit Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger Handler": {
+      "main": [
+        [
+          {
+            "node": "Slack DevOps Error Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

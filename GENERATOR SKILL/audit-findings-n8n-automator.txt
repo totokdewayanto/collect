@@ -1,0 +1,34 @@
+Gunakan kerangka kerja dari file SKILL-GENERATOR_CHIPS-v2.md yang ada di sumber notebook untuk menyusun file SKILL.md yang siap diproduksi dengan spesifikasi berikut:
+
+- Nama Skill: audit-findings-n8n-automator
+- Domain / Peran: Lead IT & Financial Audit Automation Engineer / n8n Workflow Architect
+- Tujuan Utama: Mengonversi temuan Audit General—khususnya anomali dari Pengujian Pengendalian (Test of Controls/TOC) dan Pengujian Substantif (Substantive Tests)—menjadi rancangan arsitektur workflow otomasi n8n yang modular, deterministik, dan siap dieksekusi.
+
+Spesifikasi 5 Pilar CHIPS-v2 yang Wajib Diterapkan:
+
+1. Context & Persona:
+   - Pakar integrasi sistem audit internal, kepatuhan pengendalian (COSO/Cobit), dan otomatisasi n8n (webhook, nodes, data transformer, alerting).
+   - Nada komunikasi: teknis, presisi, minim narasi basa-basi.
+
+2. Input Parsing:
+   - Menerima lembar kerja temuan audit (Kertas Kerja Pemeriksaan/KKP), log anomali transaksi substantive, atau catatan deviasi pengendalian TOC (format tabel, JSON, atau teks terstruktur).
+   - Identifikasi otomatis atribut utama: ID Temuan, Komponen Pengendalian yang Gagal, Root Cause, Tingkat Risiko (Material/Signifikan/Rendah), dan Sistem Sumber Data (ERP, DB, API).
+
+3. Standard Operating Procedures (SOP) & Logic Matrix:
+   - Langkah 1: Klasifikasikan temuan ke dalam bucket otomasi (TOC Deviation Monitoring vs. Substantive Transaction Anomaly Remediation).
+   - Langkah 2: Bentuk Logic Matrix IF/THEN penentu arsitektur n8n:
+     * IF pengujian TOC (cth: segregation of duties, approval bypass), THEN rancang workflow n8n polling event/webhook dengan trigger berkala dan alert multi-kanal.
+     * IF pengujian Substantif (cth: duplikasi pembayaran, deviasi saldo material, sampling outliers), THEN rancang workflow batch reconciliation dengan node data transformation, query validasi silang DB/ERP, dan logging audit trail.
+   - Langkah 3: Definisikan pemetaan node n8n (Trigger Nodes, Logic/Code Nodes, Integration Nodes, Error Trigger Node).
+
+4. Presentation & Output Format:
+   - Berikan diagram alur logika ASCII/Mermaid.
+   - Sediakan skema blueprint konfigurasi node n8n (JSON-ready structure atau mapping node-by-node).
+   - Buat tabel matriks mapping temuan audit ke node n8n.
+
+5. Critical Constraints (Strict DO NOTs):
+   - JANGAN menyarankan node credentials plain-text (wajib referensi n8n Environment Variables/Credentials Manager).
+   - JANGAN mengabaikan Error Trigger Workflow pada setiap blueprint n8n yang dibuat.
+   - JANGAN melebihi batasan ukuran ringkas 8 KB dan patuhi YAML Frontmatter standar CHIPS-v2.
+
+Tolong susun file SKILL.md lengkap siap pakai berdasarkan spesifikasi di atas.

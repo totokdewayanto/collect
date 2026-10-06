@@ -1,0 +1,279 @@
+{
+  "name": "Audit_Automation_NTP_Google_Ecosystem",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1A2B3C4D5E6F7G8H9I0J",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sales_Invoices",
+          "mode": "name"
+        },
+        "event": "rowAdded"
+      },
+      "name": "Google Sheets Trigger (New Invoice)",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "GOOGLE_WORKSPACE_CREDENTIALS",
+          "name": "Google Workspace Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "projectId": "pt-ntp-audit-datawarehouse",
+        "sqlQuery": "=SELECT bl_number, bl_date, shipping_status FROM `pt-ntp-audit-datawarehouse.export_logistics.bill_of_lading` WHERE sales_order_ref = '{{ $json.sales_order_ref }}' LIMIT 1;"
+      },
+      "name": "Google BigQuery (Fetch B/L Data)",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 2,
+      "position": [480, 300],
+      "credentials": {
+        "googleBigQueryOAuth2Api": {
+          "id": "GCP_BIGQUERY_CREDENTIALS",
+          "name": "GCP BigQuery Audit Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Logic Engine: Cut-off Validation & Materiality Assessment (SA 320 / PSAK 72)\nconst invoice = $('Google Sheets Trigger (New Invoice)').first().json;\nconst shipping =$input.first().json;\n\nconst TE_THRESHOLD = 2100000000; // Performance Materiality PT NTP (Rp 2.1 Miliar)\nconst invoiceDate = new Date(invoice.invoice_date);\nconst blDate = shipping && shipping.bl_date ? new Date(shipping.bl_date) : null;\n\nlet isCutoffError = false;\nlet riskLevel = 'NONE';\nlet requiresAJE = false;\n\n// Validation Rule: FOB Shipping Point Control Transfer\nif (!blDate || blDate > invoiceDate) {\n  isCutoffError = true;\n  if (Number(invoice.net_amount) >= TE_THRESHOLD) {\n    riskLevel = 'MATERIAL_TE_EXCEEDED';\n    requiresAJE = true;\n  } else {\n    riskLevel = 'IMMATERIAL_DEVIATION';\n  }\n}\n\nreturn [{\n  json: {\n    invoice_id: invoice.invoice_id,\n    customer_name: invoice.customer_name,\n    net_amount: Number(invoice.net_amount),\n    invoice_date: invoice.invoice_date,\n    bl_number: shipping ? (shipping.bl_number || 'MISSING') : 'MISSING',\n    bl_date: shipping ? (shipping.bl_date || null) : null,\n    cutoff_error: isCutoffError,\n    risk_level: riskLevel,\n    requires_proposed_aje: requiresAJE,\n    anomali_flag: isCutoffError ? 'L2_PREMATURE_REVENUE' : 'NONE'\n  }\n}];"
+      },
+      "name": "3-Way Matching Code Node",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.cutoff_error }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "name": "Switch: Anomali Detected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [920, 300]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1A2B3C4D5E6F7G8H9I0J",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sales_Invoices",
+          "mode": "name"
+        },
+        "columnToMatchOn": "invoice_id",
+        "valueToMatchOn": "={{ $json.invoice_id }}",
+        "fieldsUi": {
+          "fieldValues": [
+            {
+              "fieldName": "status",
+              "fieldValue": "HARD_LOCK_BLOCKED"
+            },
+            {
+              "fieldName": "audit_flag",
+              "fieldValue": "={{ $json.anomali_flag }}"
+            }
+          ]
+        }
+      },
+      "name": "Google Sheets (Apply Hard-Lock)",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [1140, 200],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GOOGLE_WORKSPACE_CREDENTIALS",
+          "name": "Google Workspace Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "projectId": "pt-ntp-audit-datawarehouse",
+        "sqlQuery": "=INSERT INTO `pt-ntp-audit-datawarehouse.audit_logs.finding_records` (finding_ref, invoice_id, net_amount, bl_date, anomaly_flag, risk_level, requires_aje, logged_at)\nVALUES ('B.210', '{{ $json.invoice_id }}', {{$json.net_amount }}, '{{ $json.bl_date }}', '{{$json.anomali_flag }}', '{{ $json.risk_level }}', {{$json.requires_proposed_aje }}, CURRENT_TIMESTAMP());"
+      },
+      "name": "Google BigQuery (Write Audit Finding)",
+      "type": "n8n-nodes-base.googleBigQuery",
+      "typeVersion": 2,
+      "position": [1360, 200],
+      "credentials": {
+        "googleBigQueryOAuth2Api": {
+          "id": "GCP_BIGQUERY_CREDENTIALS",
+          "name": "GCP BigQuery Audit Service Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "space": "spaces/AAAA1234BBB",
+        "message": "=🚨 *AUDIT ANOMALY ALERT - PT NTP (KKP B.210)* 🚨\n• *Invoice ID*: {{ $json.invoice_id }}\n• *Pelanggan*: {{ $json.customer_name }}\n• *Nilai Tagihan*: Rp {{$json.net_amount.toLocaleString('id-ID') }}\n• *Status Cut-off*: PREMATURE REVENUE (B/L Date: {{ $json.bl_date \vert{}\vert{} 'MISSING' }})\n• *Risk Level*: {{$json.risk_level }}\n• *Tindakan Otomatis*: Status Spreadsheet diubah ke HARD_LOCK_BLOCKED & Record tersimpan di BigQuery."
+      },
+      "name": "Google Chat Alert",
+      "type": "n8n-nodes-base.googleChat",
+      "typeVersion": 1,
+      "position": [1580, 200],
+      "credentials": {
+        "googleChatOAuth2Api": {
+          "id": "GOOGLE_CHAT_CREDENTIALS",
+          "name": "Google Chat Audit Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "financial.controller@pt-ntp.co.id, audit.lead@external-auditor.com",
+        "subject": "=[AUDIT ALERT] Hard-Lock Applied on Premature Revenue Invoice {{ $json.invoice_id }}",
+        "message": "=Yth. Tim Keuangan & Audit PT NTP,\n\nSistem otomatisasi audit menemukan deviasi cut-off penjualan ekspor (PSAK 72 / SA 315) pada transaksi berikut:\n\n- Invoice ID: {{ $json.invoice_id }}\n- Pelanggan: {{$json.customer_name }}\n- Nilai Transaksi: Rp {{ $json.net_amount.toLocaleString('id-ID') }}\n- Tanggal B/L: {{$json.bl_date || 'Belum Terbit' }}\n\nTindakan Otomatis Diterapkan:\n1. Status faktur di-Hard Lock pada Google Sheets ERP.\n2. Draf usulan AJE dibuat pada BigQuery Data Warehouse.\n\nMohon lakukan verifikasi dokumen pabean terkait."
+      },
+      "name": "Gmail Audit Notification",
+      "type": "n8n-nodes-base.googleGmail",
+      "typeVersion": 2,
+      "position": [1800, 200],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "GMAIL_AUDIT_NOTIFIER",
+          "name": "Gmail Audit Notifier"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "name": "Error Trigger Handler",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [250, 550]
+    },
+    {
+      "parameters": {
+        "space": "spaces/DEVOPS_ERRORS_SPACE",
+        "message": "=⚠️ *n8n Execution Failure - Google Ecosystem Workflow*\n• *Workflow*: Audit_Automation_NTP_Google_Ecosystem\n• *Execution ID*: {{ $execution.id }}\n• *Error Node*: {{ $json.execution.error.node.name }}\n• *Error Message*: {{$json.execution.error.message }}"
+      },
+      "name": "Google Chat DevOps Alert",
+      "type": "n8n-nodes-base.googleChat",
+      "typeVersion": 1,
+      "position": [480, 550],
+      "credentials": {
+        "googleChatOAuth2Api": {
+          "id": "GOOGLE_CHAT_CREDENTIALS",
+          "name": "Google Chat Audit Bot"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Google Sheets Trigger (New Invoice)": {
+      "main": [
+        [
+          {
+            "node": "Google BigQuery (Fetch B/L Data)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google BigQuery (Fetch B/L Data)": {
+      "main": [
+        [
+          {
+            "node": "3-Way Matching Code Node",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3-Way Matching Code Node": {
+      "main": [
+        [
+          {
+            "node": "Switch: Anomali Detected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch: Anomali Detected?": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets (Apply Hard-Lock)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets (Apply Hard-Lock)": {
+      "main": [
+        [
+          {
+            "node": "Google BigQuery (Write Audit Finding)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google BigQuery (Write Audit Finding)": {
+      "main": [
+        [
+          {
+            "node": "Google Chat Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Chat Alert": {
+      "main": [
+        [
+          {
+            "node": "Gmail Audit Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger Handler": {
+      "main": [
+        [
+          {
+            "node": "Google Chat DevOps Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
